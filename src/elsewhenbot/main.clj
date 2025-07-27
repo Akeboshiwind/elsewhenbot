@@ -40,7 +40,8 @@
 
 (defn start []
   (let [bot (tg/make-client
-              {:token @token})
+              {:token @token
+               :timeout 35000})
         path (or (System/getenv "DATA_PATH")
                  "/data/data.edn")
         app (defaults/make-app routes {:store/path path})
