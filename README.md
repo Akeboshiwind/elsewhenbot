@@ -32,6 +32,7 @@ A docker container is provided at `ghcr.io/akeboshiwind/elsewhenbot:latest`.
 | --- | --- | --- |
 | `TELEGRAM_BOT_TOKEN`* | The bot token. If you don't have one, go see the [botfather](https://telegram.me/BotFather). | N/A |
 | `DATA_PATH` | The path that config is stored at. | `/data/data/edn` |
+| `HEALTH_CHECK_THRESHOLD_SECONDS` | Maximum seconds without receiving updates before the bot exits (health check). | `120` |
 
 * - Required
 
