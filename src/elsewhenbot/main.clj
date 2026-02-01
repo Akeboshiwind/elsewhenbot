@@ -35,8 +35,8 @@
 
 (def token
   (delay
-    (or (System/getenv "TELEGRAM_BOT_TOKEN")
-        (throw (Exception. "TELEGRAM_BOT_TOKEN is not set")))))
+    (or (System/getenv "BOT_TOKEN")
+        (throw (Exception. "BOT_TOKEN is not set")))))
 
 (defn start []
   (let [bot (tg/make-client

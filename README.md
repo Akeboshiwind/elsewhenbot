@@ -30,10 +30,10 @@ A docker container is provided at `ghcr.io/akeboshiwind/elsewhenbot:latest`.
 
 | Name | Description | Default Value |
 | --- | --- | --- |
-| `TELEGRAM_BOT_TOKEN`* | The bot token. If you don't have one, go see the [botfather](https://telegram.me/BotFather). | N/A |
-| `DATA_PATH` | The path that config is stored at. | `/data/data/edn` |
+| `BOT_TOKEN`* | The bot token. If you don't have one, go see the [botfather](https://telegram.me/BotFather). | N/A |
+| `DATA_PATH` | The path that config is stored at. | `/data/data.edn` |
 
-* - Required
+\* Required
 
 
 
