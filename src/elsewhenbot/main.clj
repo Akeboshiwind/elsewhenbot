@@ -1,8 +1,10 @@
 (ns elsewhenbot.main
   (:gen-class)
   (:require [tg-clj.core :as tg]
+            [tg-clj-server.poll :as poll]
+            [tg-clj-server.webhook :as webhook]
             [tg-clj-server.defaults.poll :as poll-defaults]
-            [tg-clj-server.poll :as tg-poll]
+            [tg-clj-server.defaults.webhook :as webhook-defaults]
             [tg-clj-server.utils :as tu]
             [clojure.tools.logging :as log]
 
@@ -33,24 +35,37 @@
                                              (assoc to (get % from))
                                              (dissoc from)))}))]])
 
-(def token
-  (delay
-    (or (System/getenv "BOT_TOKEN")
-        (throw (Exception. "BOT_TOKEN is not set")))))
-
 (defn start []
-  (let [bot (tg/make-client
-              {:token @token
-               :timeout 35000})
+  (let [token (or (System/getenv "BOT_TOKEN")
+                  (throw (Exception. "BOT_TOKEN is not set")))
+        webhook-url (System/getenv "WEBHOOK_URL")
+        webhook-secret (System/getenv "WEBHOOK_SECRET")
         path (or (System/getenv "DATA_PATH")
                  "/data/data.edn")
-        app (poll-defaults/make-app routes {:store/path path})
-        stop (tg-poll/run-server bot app)]
-    (log/info "Started bot!")
-    #(do (log/info "Stopped bot!")
-         (stop))))
+        client (tg/make-client {:token token :timeout 35000})]
+    (if webhook-url
+      ;; Webhook mode
+      (let [app (webhook-defaults/make-app routes {:store/path path})
+            port (parse-long (or (System/getenv "PORT") "8080"))]
+        (log/info "Starting webhook mode on port" port)
+        (tg/invoke client {:op :setWebhook
+                           :request {:url webhook-url
+                                     :secret_token webhook-secret}})
+        (webhook/run-server client app {:port port
+                                        :secret-token webhook-secret}))
+      ;; Polling mode
+      (let [app (poll-defaults/make-app routes {:store/path path})]
+        (log/info "Starting polling mode")
+        (tg/invoke client {:op :deleteWebhook})
+        (poll/run-server client app)))))
 
 (comment
+  ;; Polling mode (default):
+  ;; BOT_TOKEN=<token> clj -M:dev -m elsewhenbot.main
+
+  ;; Webhook mode:
+  ;; BOT_TOKEN=<token> WEBHOOK_URL=https://... WEBHOOK_SECRET=... PORT=8080 clj -M:dev -m elsewhenbot.main
+
   (def stop (start))
   (stop))
 

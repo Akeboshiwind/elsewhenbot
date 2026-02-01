@@ -32,6 +32,9 @@ A docker container is provided at `ghcr.io/akeboshiwind/elsewhenbot:latest`.
 | --- | --- | --- |
 | `BOT_TOKEN`* | The bot token. If you don't have one, go see the [botfather](https://telegram.me/BotFather). | N/A |
 | `DATA_PATH` | The path that config is stored at. | `/data/data.edn` |
+| `WEBHOOK_URL` | If set, runs in webhook mode at this URL. | N/A (polling mode) |
+| `WEBHOOK_SECRET` | Secret token for webhook verification. | N/A |
+| `PORT` | Port for webhook server. | `8080` |
 
 \* Required
 
