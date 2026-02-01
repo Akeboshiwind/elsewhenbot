@@ -22,6 +22,43 @@ Cooked up in a day to solve a problem :)
 
 ## Deployment
 
+### Fly.io
+
+Deploy to Fly.io with scale-to-zero (uses webhook mode):
+
+```bash
+# Create app and volume
+fly apps create elsewhenbot
+fly volumes create data --region lhr --size 1
+
+# Set secrets
+fly secrets set BOT_TOKEN=<your-bot-token>
+fly secrets set WEBHOOK_URL=https://elsewhenbot.fly.dev/
+fly secrets set WEBHOOK_SECRET=$(openssl rand -hex 32)
+
+# Deploy
+fly deploy
+```
+
+#### Importing data from an old instance
+
+If you have existing data to import:
+
+```bash
+# First deploy to create the machine
+fly deploy
+
+# Copy your data file to the volume
+fly sftp shell
+> put /path/to/local/data.edn /data/data.edn
+
+# Or use ssh
+fly ssh console
+cat > /data/data.edn << 'EOF'
+<paste your data here>
+EOF
+```
+
 ### Docker
 
 A docker container is provided at `ghcr.io/akeboshiwind/elsewhenbot:latest`.
