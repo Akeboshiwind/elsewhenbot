@@ -1,6 +1,5 @@
 {:paths ["src"]
- :deps {io.github.akeboshiwind/tg-clj {:git/tag "v0.3.0" :git/sha "4852eb5"}
-        io.github.akeboshiwind/tg-clj-server {:git/tag "v0.3.1" :git/sha "8ec86b2"}
+ :deps {io.github.akeboshiwind/tg-clj-server {:git/tag "v0.4.0" :git/sha "dfb7160"}
         com.zoho/hawking {:mvn/version "0.1.8"}
         ; Logging
         ch.qos.logback/logback-classic {:mvn/version "1.5.3"}}

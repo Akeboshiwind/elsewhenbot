@@ -1,7 +1,7 @@
 (ns elsewhenbot.main
   (:gen-class)
   (:require [tg-clj.core :as tg]
-            [tg-clj-server.defaults :as defaults]
+            [tg-clj-server.defaults.poll :as poll-defaults]
             [tg-clj-server.poll :as tg-poll]
             [tg-clj-server.utils :as tu]
             [clojure.tools.logging :as log]
@@ -44,11 +44,11 @@
                :timeout 35000})
         path (or (System/getenv "DATA_PATH")
                  "/data/data.edn")
-        app (defaults/make-app routes {:store/path path})
-        stop-handle (future (tg-poll/run-server bot app))]
+        app (poll-defaults/make-app routes {:store/path path})
+        stop (tg-poll/run-server bot app)]
     (log/info "Started bot!")
     #(do (log/info "Stopped bot!")
-         (future-cancel stop-handle))))
+         (stop))))
 
 (comment
   (def stop (start))
